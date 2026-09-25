@@ -64,9 +64,10 @@ if submitted:
         ):
             try:
                 llm = GroqCompatibleLLM(
-                    model="groq/openai/gpt-oss-120b",
-                    temperature=0.2,
-                )
+    model="groq/openai/gpt-oss-120b",
+    temperature=0.2,
+    max_tokens=1200,
+)
 
                 researcher = Agent(
                     role="Academic research assistant",
@@ -81,7 +82,7 @@ if submitted:
                     tools=[search_papers, search_web],
                     llm=llm,
                     allow_delegation=False,
-                    max_iter=8,
+                    max_iter=4,
                     verbose=False,
                 )
 
