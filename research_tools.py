@@ -10,7 +10,7 @@ def search_papers(query: str) -> str:
     try:
         response = requests.get(
             "https://api.crossref.org/works",
-            params={"query": query, "rows": 7, "select": "DOI,title,author,published,container-title,abstract,URL,type"},
+            params={"query": query, "rows": 4, "select": "DOI,title,author,published,container-title,abstract,URL,type"},
             headers={"User-Agent": "AIResearchAgent/0.1 (academic prototype)"},
             timeout=20,
         )
@@ -27,7 +27,7 @@ def search_papers(query: str) -> str:
                 "url": item.get("URL"),
                 "journal": (item.get("container-title") or [""])[0],
                 "abstract_available": bool(item.get("abstract")),
-                "abstract": item.get("abstract", "")[:1800],
+                "abstract": item.get("abstract", "")[:500],
             })
         return json.dumps(papers, ensure_ascii=False)
     except (requests.RequestException, KeyError, ValueError) as exc:
@@ -38,7 +38,7 @@ def search_papers(query: str) -> str:
 def search_web(query: str) -> str:
     """Find web pages relevant to a research topic; snippets do not prove study findings."""
     try:
-        results = DDGS(timeout=10).text(query, max_results=5)
+        results = DDGS(timeout=10).text(query, max_results=3)
         return json.dumps([{"title": r.get("title"), "url": r.get("href"), "snippet": r.get("body")} for r in results], ensure_ascii=False)
     except Exception as exc:
         return f"Web search failed: {exc}"
