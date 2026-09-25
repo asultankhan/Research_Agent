@@ -7,7 +7,7 @@ from research_tools import search_papers, search_web
 
 
 class GroqCompatibleLLM(LLM):
-    """Remove CrewAI's unsupported cache marker before calling Groq."""
+    """Remove an unsupported cache field before calling Groq."""
 
     def call(self, messages, *args, **kwargs):
         if isinstance(messages, list):
@@ -27,8 +27,8 @@ class GroqCompatibleLLM(LLM):
 st.set_page_config(page_title="AI Research Agent", page_icon="🔎")
 st.title("AI Research Agent")
 st.caption(
-    "A single CrewAI agent. Review the linked sources before using "
-    "its findings in a publication."
+    "A single CrewAI agent. Review the linked sources "
+    "before using its findings in a publication."
 )
 
 try:
@@ -58,18 +58,16 @@ if submitted:
     if not question.strip():
         st.warning("Enter a research question first.")
     else:
-        with st.spinner(
-            "Searching and preparing your brief. "
-            "This may take a minute..."
-        ):
- try:
-               paper_records = search_papers.run(question.strip())
-web_records = search_web.run(question.strip()) 
+        with st.spinner("Searching and preparing your brief..."):
+            try:
+                paper_records = search_papers.run(question.strip())
+                web_records = search_web.run(question.strip())
+
                 llm = GroqCompatibleLLM(
-    model="groq/openai/gpt-oss-120b",
-    temperature=0.2,
-    max_tokens=1200,
-)
+                    model="groq/openai/gpt-oss-120b",
+                    temperature=0.2,
+                    max_tokens=1200,
+                )
 
                 researcher = Agent(
                     role="Academic research assistant",
@@ -78,8 +76,8 @@ web_records = search_web.run(question.strip())
                         "cautious research briefs"
                     ),
                     backstory=(
-                        "You distinguish search results and metadata "
-                        "from actual full-text evidence."
+                        "You distinguish publication metadata "
+                        "from full-text evidence."
                     ),
                     tools=[],
                     llm=llm,
@@ -90,22 +88,22 @@ web_records = search_web.run(question.strip())
 
                 task = Task(
                     description=(
-    f"Investigate this question: {question.strip()}\n"
-    "Analyze only the source records supplied below. "
-    "Do not call tools or browse. "
-    "Include up to three relevant papers with title, year, "
-    "DOI link, and why relevant. "
-    "Then give a short synthesis and possible gaps. "
-    "State whether observations come from metadata or an abstract. "
-    "Do not invent findings, methods, sample sizes, or citations. "
-    "If source information is insufficient, say so.\n\n"
-    f"Crossref records:\n{paper_records}\n\n"
-    f"Web search snippets (context only):\n{web_records}"
-),
+                        f"Investigate this question: {question.strip()}\n"
+                        "Analyze only the source records below. "
+                        "Do not call tools or browse. "
+                        "Include up to three relevant papers with title, "
+                        "year, DOI link, and why relevant. "
+                        "Give a short synthesis and possible gaps. "
+                        "State whether observations come from metadata "
+                        "or an abstract. Do not invent findings, methods, "
+                        "sample sizes, or citations. If information is "
+                        "insufficient, say so.\n\n"
+                        f"Crossref records:\n{paper_records}\n\n"
+                        f"Web snippets (context only):\n{web_records}"
+                    ),
                     expected_output=(
-                        "A concise Markdown research brief with a "
-                        "source table, synthesis, gaps, and evidence "
-                        "limitations."
+                        "A concise Markdown research brief with a source "
+                        "table, synthesis, gaps, and evidence limitations."
                     ),
                     agent=researcher,
                 )
