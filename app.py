@@ -90,16 +90,18 @@ web_records = search_web.run(question.strip())
 
                 task = Task(
                     description=(
-                        f"Investigate this question: {question.strip()}\n"
-                        "Use the scholarly publication tool once. Use web search only if essential. "
-                        "Include up to three relevant papers with title, year, DOI link, and why relevant. "
-                        "Then give a short synthesis and possible gaps. "
-                        "Explicitly state whether your observations come "
-                        "from metadata, an abstract, or a full text. "
-                        "Do not invent findings, methods, sample sizes, "
-                        "quotations, or citations. "
-                        "If source information is insufficient, say so."
-                    ),
+    f"Investigate this question: {question.strip()}\n"
+    "Analyze only the source records supplied below. "
+    "Do not call tools or browse. "
+    "Include up to three relevant papers with title, year, "
+    "DOI link, and why relevant. "
+    "Then give a short synthesis and possible gaps. "
+    "State whether observations come from metadata or an abstract. "
+    "Do not invent findings, methods, sample sizes, or citations. "
+    "If source information is insufficient, say so.\n\n"
+    f"Crossref records:\n{paper_records}\n\n"
+    f"Web search snippets (context only):\n{web_records}"
+),
                     expected_output=(
                         "A concise Markdown research brief with a "
                         "source table, synthesis, gaps, and evidence "
