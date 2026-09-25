@@ -1,0 +1,4 @@
+crewai[litellm]>=1.15,<1.16
+streamlit>=1.45,<2
+requests>=2.32,<3
+ddgs>=9,<10
