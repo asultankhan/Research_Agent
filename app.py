@@ -89,10 +89,8 @@ if submitted:
                 task = Task(
                     description=(
                         f"Investigate this question: {question.strip()}\n"
-                        "Use the scholarly publication tool first; "
-                        "optionally use web search for context. "
-                        "Include up to five relevant papers with title, "
-                        "year, DOI link, and why relevant. "
+                        "Use the scholarly publication tool once. Use web search only if essential. "
+                        "Include up to three relevant papers with title, year, DOI link, and why relevant. "
                         "Then give a short synthesis and possible gaps. "
                         "Explicitly state whether your observations come "
                         "from metadata, an abstract, or a full text. "
