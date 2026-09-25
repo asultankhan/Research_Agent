@@ -62,7 +62,9 @@ if submitted:
             "Searching and preparing your brief. "
             "This may take a minute..."
         ):
-            try:
+ try:
+               paper_records = search_papers.run(question.strip())
+web_records = search_web.run(question.strip()) 
                 llm = GroqCompatibleLLM(
     model="groq/openai/gpt-oss-120b",
     temperature=0.2,
@@ -79,7 +81,7 @@ if submitted:
                         "You distinguish search results and metadata "
                         "from actual full-text evidence."
                     ),
-                    tools=[search_papers, search_web],
+                    tools=[],
                     llm=llm,
                     allow_delegation=False,
                     max_iter=4,
